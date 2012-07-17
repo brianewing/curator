@@ -69,6 +69,7 @@ describe Curator::Repository do
         model = TestModel.new(:some_field => "Acme Inc.")
         puts "indexes: #{TestModelRepository._indexed_fields}"
         TestModelRepository.save(model)
+        10.times { TestModelRepository.find_by_id(model.id); sleep 1 }
         system "curl -v http://localhost:8098/buckets?buckets=true"
         system "curl -v http://localhost:8098/buckets/curator:test:test_models/keys?keys=true"
         system "curl -v http://localhost:8098/buckets/curator%3Atest%3Asome_models/keys?keys=true"
