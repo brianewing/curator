@@ -54,6 +54,7 @@ describe Curator::Repository do
 
     describe "indexed_fields" do
       it "adds find methods for the indexed fields" do
+        puts "----------- FAILING TEST ------------"
         def_transient_class(:TestModelRepository) do
           include Curator::Repository
           attr_reader :id, :some_field
@@ -67,6 +68,7 @@ describe Curator::Repository do
 
         model = TestModel.new(:some_field => "Acme Inc.")
         TestModelRepository.save(model)
+        puts "----------- SAVE DONE ------------"
 
         TestModelRepository.find_by_some_field("Acme Inc.").should == [model]
       end

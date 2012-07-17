@@ -33,6 +33,7 @@ module Curator
           object.indexes["#{index_name}_bin"] << _normalized_index_data(index_data)
         end
         result = object.store
+        p result
         result.key
       end
 
