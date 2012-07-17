@@ -139,7 +139,9 @@ module Curator
           [:updated_at, _format_time_for_index(object.send(:updated_at))],
           [:version, object.version]
         ]
-        Hash[index_values]
+        r = Hash[index_values]
+        puts "_indexes: #{r.inspect}"
+        r
       end
 
       def _serialize(object)

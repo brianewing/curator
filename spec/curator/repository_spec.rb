@@ -69,7 +69,6 @@ describe Curator::Repository do
         model = TestModel.new(:some_field => "Acme Inc.")
         puts "indexes: #{TestModelRepository._indexed_fields}"
         TestModelRepository.save(model)
-        sleep 5
         puts "----------- SAVE DONE ------------"
 
         TestModelRepository.find_by_some_field("Acme Inc.").should == [model]
