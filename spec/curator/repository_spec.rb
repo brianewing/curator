@@ -71,6 +71,8 @@ describe Curator::Repository do
         TestModelRepository.save(model)
         system "curl -v http://localhost:8098/buckets?buckets=true"
         system "curl -v http://localhost:8098/buckets/curator:test:test_models/keys?keys=true"
+        system "curl -v http://localhost:8098/buckets/curator%3Atest%3Asome_models/keys?keys=true"
+        system "curl -v http://localhost:8098/buckets/curator%3Atest%3Asome_models/keys/#{model.id}"
         puts "----------- SAVE DONE ------------"
 
         TestModelRepository.find_by_some_field("Acme Inc.").should == [model]
