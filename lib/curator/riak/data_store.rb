@@ -32,6 +32,8 @@ module Curator
         options.fetch(:index, {}).each do |index_name, index_data|
           object.indexes["#{index_name}_bin"] << _normalized_index_data(index_data)
         end
+        p object
+        p object.indexes
         result = object.store
         p result
         result.key
