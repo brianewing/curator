@@ -69,7 +69,7 @@ describe Curator::Repository do
         model = TestModel.new(:some_field => "Acme Inc.")
         puts "indexes: #{TestModelRepository._indexed_fields}"
         TestModelRepository.save(model)
-        puts "curl:"
+        system "curl -v http://localhost:8098/buckets?buckets=true"
         system "curl -v http://localhost:8098/buckets/curator:test:test_models/keys?keys=true"
         puts "----------- SAVE DONE ------------"
 

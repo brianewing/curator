@@ -37,7 +37,7 @@ module Curator
         puts "object.indexes: #{object.indexes.inspect}"
         result = object.store
         puts "result: #{result.inspect}"
-        puts "result more: #{[result.vclock, result.key, result.meta, result.etag].inspect}"
+        puts "result more: #{[result.vclock, result.bucket, result.key, result.meta, result.etag].inspect}"
         result.key
       end
 
