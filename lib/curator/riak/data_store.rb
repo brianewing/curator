@@ -30,12 +30,13 @@ module Curator
         object.content_type = options.fetch(:content_type, "application/json")
         object.data = options[:value]
         options.fetch(:index, {}).each do |index_name, index_data|
+          puts "adding index: #{index_name.inspect} #{index_data.inspect}"
           object.indexes["#{index_name}_bin"] << _normalized_index_data(index_data)
         end
-        p object
-        p object.indexes
+        puts "object: #{object.inspect}"
+        puts "object.indexes: #{object.indexes.inspect}"
         result = object.store
-        p result
+        puts "result: #{result.inspect}"
         result.key
       end
 
