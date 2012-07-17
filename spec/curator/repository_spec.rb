@@ -70,7 +70,7 @@ describe Curator::Repository do
         puts "indexes: #{TestModelRepository._indexed_fields}"
         TestModelRepository.save(model)
         puts "curl:"
-        system "curl -v http://localhost:8098/buckets/curator:test:test_models/keys/#{model.id}"
+        system "curl -v http://localhost:8098/buckets/curator:test:test_models/keys?keys=true"
         puts "----------- SAVE DONE ------------"
 
         TestModelRepository.find_by_some_field("Acme Inc.").should == [model]
