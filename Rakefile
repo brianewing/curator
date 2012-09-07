@@ -22,4 +22,3 @@ namespace :gem do
     sh "gem push #{Dir.glob("*.gem").first}"
   end
 end
-
