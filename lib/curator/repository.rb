@@ -112,6 +112,8 @@ module Curator
       end
 
       def _find_by_attribute(attribute, value)
+        raise "Find by attribute not supported by data store" if not data_store.respond_to?(:find_by_attribute)
+
         if results = data_store.find_by_attribute(collection_name, attribute, value)
           results.map do |hash|
             _deserialize(hash[:key], hash[:data])
