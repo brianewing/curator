@@ -28,10 +28,6 @@ module Curator
         #pending
       end
 
-      def find_by_attribute(collection_name, attribute, query)
-        # pending
-      end
-
       def _config
         @yml_config ||= YAML.load(File.read(Curator.config.couch_config_file))[Curator.config.environment]
       end
