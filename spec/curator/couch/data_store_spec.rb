@@ -10,10 +10,42 @@ module Curator::Couch
 
     let(:data_store) { DataStore.new }
 
+    def with_stubbed_yml_config(yml)
+      data_store.instance_variable_set(:@yml_config, nil)
+      File.stub(:read).and_return(yml); yield; File.unstub(:read)
+    end
+
+    def base_url
+      data_store.instance_variable_set(:@base_url, nil)
+      data_store._base_url
+    end
+
     with_config do
       Curator.configure(:couch) do |config|
         config.environment = 'test'
+        config.couch_config_file = File.expand_path(File.dirname(__FILE__) + "/../../../config/couch.yml")
       end
+    end
+
+    it "should correctly parse url from config" do
+      with_stubbed_yml_config(<<-YML) { base_url.should == "http://example:1234" }
+        test:
+          :host: example
+          :port: 1234
+      YML
+
+      with_stubbed_yml_config(<<-YML) { base_url.should == "https://foo:bar@example:5984" }
+        test:
+          :host: example
+          :ssl: true
+          :username: foo
+          :password: bar
+      YML
+
+      with_stubbed_yml_config(<<-YML) { base_url.should == "http://exactly-as-given-without-trailing-slash" }
+        test:
+          :url: http://exactly-as-given-without-trailing-slash/
+      YML
     end
   end
 end
