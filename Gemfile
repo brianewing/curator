@@ -11,6 +11,7 @@ end
 
 group :test do
   gem 'bson_ext', '1.6.0'
+  gem 'rest-client', '1.6.7'
   gem 'mongo', '1.6.0'
   gem 'rspec', '2.8.0'
   gem 'timecop', '0.3.5'
