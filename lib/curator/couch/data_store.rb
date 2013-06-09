@@ -1,19 +1,36 @@
 require 'ostruct'
 require 'yaml'
+require 'json'
+require 'rest-client'
 
 module Curator
   module Couch
     class DataStore
       def remove_all_keys
-        # pending
+        all_docs = JSON.parse server['_all_docs'].get
+        bulk_update = all_docs['rows'].map { |row| {:_id => row['id'], :_rev => row['value']['rev'], :_deleted => true} }
+
+        server['_bulk_docs'].post({:docs => bulk_update}.to_json)
       end
 
       def reset!
-        # pending
+        remove_all_keys
       end
 
       def save(options)
-        # pending
+        key = options.delete(:key)
+
+        document = options[:value]
+        document.merge!(:_id => key) if key
+
+        if key
+          document.merge! :_id => key
+          response = server[document[:_id]].put(document.to_json)
+        else
+          response = server.post(document.to_json)
+        end
+
+        JSON.parse(response)['id']
       end
 
       def delete(collection_name, key)
@@ -25,11 +42,18 @@ module Curator
       end
 
       def find_by_key(collection_name, key)
-        #pending
+        doc = JSON.parse(server[key].get)
+        doc.delete '_rev'
+
+        {:key => doc.delete('_id'), :data => doc}
       end
 
       def default_db_name
         "#{Curator.config.database}_#{Curator.config.environment}"
+      end
+
+      def server
+        @server ||= RestClient::Resource.new(_base_url, :headers => {:content_type => 'application/json', :accept => :json})
       end
 
       def _config
