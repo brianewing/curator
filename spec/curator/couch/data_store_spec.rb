@@ -23,18 +23,19 @@ module Curator::Couch
     with_config do
       Curator.configure(:couch) do |config|
         config.environment = 'test'
+        config.database = 'curator'
         config.couch_config_file = File.expand_path(File.dirname(__FILE__) + "/../../../config/couch.yml")
       end
     end
 
     it "should correctly parse url from config" do
-      with_stubbed_yml_config(<<-YML) { base_url.should == "http://example:1234" }
+      with_stubbed_yml_config(<<-YML) { base_url.should == "http://example:1234/curator_test" }
         test:
           :host: example
           :port: 1234
       YML
 
-      with_stubbed_yml_config(<<-YML) { base_url.should == "https://foo:bar@example:5984" }
+      with_stubbed_yml_config(<<-YML) { base_url.should == "https://foo:bar@example:5984/curator_test" }
         test:
           :host: example
           :ssl: true
@@ -42,9 +43,15 @@ module Curator::Couch
           :password: bar
       YML
 
-      with_stubbed_yml_config(<<-YML) { base_url.should == "http://exactly-as-given-without-trailing-slash" }
+      with_stubbed_yml_config(<<-YML) { base_url.should == "http://example:5984/specific_database" }
         test:
-          :url: http://exactly-as-given-without-trailing-slash/
+          :host: example
+          :database: specific_database
+      YML
+
+      with_stubbed_yml_config(<<-YML) { base_url.should == "http://exactly-as-given-without-trailing-slash/db" }
+        test:
+          :url: http://exactly-as-given-without-trailing-slash/db/
       YML
     end
   end
