@@ -20,6 +20,10 @@ module Curator::Couch
       data_store._base_url
     end
 
+    before(:each) do
+      data_store.reset!
+    end
+
     with_config do
       Curator.configure(:couch) do |config|
         config.environment = 'test'
